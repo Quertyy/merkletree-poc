@@ -1,33 +1,44 @@
 from Crypto.Hash import keccak
+import math
 
-keccak_hash = keccak.new(digest_bits=256)
-
-keccak_hash.update(b'salut')
-print(keccak_hash.hexdigest())
 
 class MerkleTree:
+
     def __init__(self, data_list: list):
-        self.data = []
+        self.data = data_list
         nb_block = len(data_list)
-        self.__add_data(data_list)
-        start_index = self.__compute_start_index(nb_block)
+        self.hashes_list = self.__data_hash_list(data_list)
+        (total_iteration, start_index) = self.__count_enumeration(nb_block)
+        self.iteration_count = total_iteration
 
-    def __add_data(self, data_list: list) -> list:
-        for data in data_list:
-            self.data.append(data)
-        return self.data
+    def __data_hash_list(self, data_list: list):
+        length = len(data_list)
+        hashes_list = [self.__compute_hash(data_list[i]) for i in range(length)]
+        return hashes_list
 
-    def __compute_start_index(self, data_length: int) -> int:
-        count = 0
-        while 2**count <= data_length:
-            count += 1
-        return ((2 ** count) - data_length)
+    def __compute_hash(self, hash: str):
+        keccak_hash = keccak.new(digest_bits=256)
+        keccak_hash.update(hash.encode('utf-8'))
+        return keccak_hash.hexdigest()
 
-    #def __iteration(self, i: int, start_index: int, total_leaves: int):
+    def __count_enumeration(self, block_count: int):
+        total_iteration = math.ceil(math.log2(block_count))
+        start_index = block_count - (2**total_iteration)
+        return (total_iteration, start_index)
+
+    
+
+
+    #def __start_iteration(self, start_index: int):
+        
+
+    
         
 
 
-x = MerkleTree(1)
+x = MerkleTree(["salut", "sa", "va", "oui", "et"])
 
 print(x.data)
+print(x.hashes_list)
+print(x.iteration_count)
 
