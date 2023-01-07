@@ -3,7 +3,13 @@ import math
 
 
 class MerkleTree:
-
+    '''
+    This is a simple implementation of the merkle tree structure
+    It uses the keccak256 hashing algorithm on hexadecimal strings
+    Args:
+        data_list (list): Array of data that you want to hash
+        sorted_pairs (bool): If set to true, the hashing pairs will be sorted
+    '''
     def __init__(self, data_list: list, sorted_pairs=False):
         self.data = data_list
         self.hashes_list = []
@@ -35,7 +41,6 @@ class MerkleTree:
             self.hashes_list.append(hash_list)
         return self.hashes_list
 
-
     def __data_hash_list(self, data_list: list):
         length = len(data_list)
         hashes_list = [self.__compute_hash(data_list[i]) for i in range(length)]
@@ -60,26 +65,3 @@ class MerkleTree:
 
     def get_root(self):
         return "".join(self.hashes_list[-1])
-
-    #def get_proof(self, data):
-
-
-x = MerkleTree(
-        [
-        "0xDc3649D061897E8e826dA411a8AcB19c38152180",
-        "0x0ee60464b71eD44A18A01D4a102010835Ae809E9",
-        "0x01640032a834998cc4f8Cbd56fDD3Ab548D8383c",
-        "0x0746a63DA6ce89d409221f6D1033264FEF92F9fA",
-        "0x37eA03F5b2393F66eE491fA7eD981879931cE585"
-        ],
-        sorted_pairs=True
-    )
-
-
-
-
-
-print(x.get_layers())
-#print(x.get_total_hash_levels())
-#print(x.get_root())
-print(x.get_leaves())
